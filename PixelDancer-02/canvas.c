@@ -11,7 +11,7 @@ Canvas *Canvas_New(int w,int h) {
 
 		for(int j=0;j<h;j++) {
 			for(int i=0;i<w;i++) {
-				canvas->pixels[i+j*w]=0;
+				canvas->pixels[i+j*w]=-1;
 			}
 		}
 		

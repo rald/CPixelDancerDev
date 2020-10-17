@@ -38,9 +38,11 @@ int main(int argc, char *argv[]) {
 		GL2D_RGBA(255,255,255,255)
 	);
 
+	int currentColorIndex=0;
+
 	Canvas *canvas=Canvas_New(16,16);
 
-	Grid *grid=Grid_New(0,0,16,16,8);
+	Grid *grid=Grid_New(0,0,16,16,16);
 
 	grid->visible=true;
 
@@ -51,6 +53,8 @@ int main(int argc, char *argv[]) {
 
 
 	while(!quit) {
+
+		Grid_HandleEvents(grid,canvas,palette,currentColorIndex);
 
 		glfwSwapBuffers();
 
