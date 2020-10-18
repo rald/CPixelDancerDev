@@ -81,7 +81,7 @@ void Canvas_HandleEvents(Canvas *canvas,Palette *palette) {
 		}
 
 	}
-
+	
 	if(glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT)==GLFW_PRESS) {
 		if(x>=0 && x<=canvas->w && y>=0 && y<=canvas->h) {
 			Palette_EraseCursor(palette);
@@ -91,7 +91,7 @@ void Canvas_HandleEvents(Canvas *canvas,Palette *palette) {
 		}
 	}
 
-	if(glfwGetKey('F')==GLFW_PRESS) {
+	if(glfwGetMouseButton(GLFW_MOUSE_BUTTON_MIDDLE)==GLFW_PRESS) {
 		int pixel=canvas->pixels[x+y*canvas->w];
 		if(pixel!=palette->idx) {
 			Canvas_FloodFill(canvas,palette,x,y,pixel);
