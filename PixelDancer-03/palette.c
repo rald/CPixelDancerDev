@@ -37,7 +37,7 @@ void Palette_Free(Palette **palette) {
 }
 
 
-static void Palette_DrawColor(Palette *palette,int i) {
+void Palette_DrawCursor(Palette *palette,int i) {
 	int hf=palette->sz/2;
 	int sz=palette->sz;
 	int x0=((i+1)%palette->w)*sz+palette->x;
@@ -59,9 +59,18 @@ static void Palette_DrawColor(Palette *palette,int i) {
 	}
 }
 
+void Palette_EraseCursor(Palette *palette) {
+	int x2=((palette->idx+1)%palette->w)*palette->sz+palette->x;
+	int y2=((palette->idx+1)/palette->w)*palette->sz+palette->y;
+	int x3=x2+palette->sz;
+	int y3=y2+palette->sz;
+
+	glBox(x2,y2,x3,y3,palette->colors[1]);
+}
+
 void Palette_Draw(Palette *palette) {
 	for(int i=-1;i<palette->numColors;i++) {
-		Palette_DrawColor(palette,i);
+		Palette_DrawCursor(palette,i);
 	}
 }
 
@@ -80,15 +89,8 @@ void Palette_HandleEvents(Palette *palette) {
 			int y1=y0+palette->sz;
 			
 			if(mouseX>=x0 && mouseX<=x1 && mouseY>=y0 && mouseY<=y1) {
-				int x2=((palette->idx+1)%palette->w)*palette->sz+palette->x;
-				int y2=((palette->idx+1)/palette->w)*palette->sz+palette->y;
-				int x3=x2+palette->sz;
-				int y3=y2+palette->sz;
-
-				glBox(x2,y2,x3,y3,palette->colors[1]);
-
-				Palette_DrawColor(palette,i);
-								
+				Palette_EraseCursor(palette);
+				Palette_DrawCursor(palette,i);
 				palette->idx=i;
 				break;
 			}

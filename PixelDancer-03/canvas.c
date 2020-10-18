@@ -33,7 +33,7 @@ void Canvas_Free(Canvas **canvas) {
 
 
 
-static void Canvas_DrawPoint(Canvas *canvas,Palette *palette,int x,int y) {
+static void Canvas_DrawCell(Canvas *canvas,Palette *palette,int x,int y) {
 	int hf=canvas->sz/2;
 	int sz=canvas->sz;
 	int x0=x*sz+canvas->x;
@@ -58,7 +58,7 @@ static void Canvas_DrawPoint(Canvas *canvas,Palette *palette,int x,int y) {
 void Canvas_Draw(Canvas *canvas,Palette *palette) {
 	for(int j=0;j<canvas->h;j++) {
 		for(int i=0;i<canvas->w;i++) {
-			Canvas_DrawPoint(canvas,palette,i,j);
+			Canvas_DrawCell(canvas,palette,i,j);
 		}
 	}
 }
@@ -70,18 +70,52 @@ void Canvas_HandleEvents(Canvas *canvas,Palette *palette) {
 
 	glfwGetMousePos(&mouseX,&mouseY);
 	
-	if(glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT)==GLFW_PRESS) {
+	int x=(mouseX-canvas->x)/canvas->sz;
+	int y=(mouseY-canvas->y)/canvas->sz;
 
-		int x=(mouseX-canvas->x)/canvas->sz;
-		int y=(mouseY-canvas->y)/canvas->sz;
+	if(glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT)==GLFW_PRESS) {
 
 		if(x>=0 && x<=canvas->w && y>=0 && y<=canvas->h) {
 			canvas->pixels[x+y*canvas->w]=palette->idx;
-			Canvas_DrawPoint(canvas,palette,x,y);
+			Canvas_DrawCell(canvas,palette,x,y);
 		}
 
+	}
+
+	if(glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT)==GLFW_PRESS) {
+		if(x>=0 && x<=canvas->w && y>=0 && y<=canvas->h) {
+			Palette_EraseCursor(palette);
+			palette->idx=canvas->pixels[x+y*canvas->w];
+			Palette_DrawCursor(palette,palette->idx);
+			
+		}
+	}
+
+	if(glfwGetKey('F')==GLFW_PRESS) {
+		int pixel=canvas->pixels[x+y*canvas->w];
+		if(pixel!=palette->idx) {
+			Canvas_FloodFill(canvas,palette,x,y,pixel);
+		}
 	}
 
 }
 
 
+void Canvas_FloodFill(Canvas *canvas,Palette *palette,int x,int y,int targetColorIndex) {
+
+	if(x<0 || x>=canvas->w || y<0 || y>=canvas->h) return;
+
+	if(canvas->pixels[x+y*canvas->w]==targetColorIndex) {
+
+		canvas->pixels[x+y*canvas->w]=palette->idx;
+
+		Canvas_DrawCell(canvas,palette,x,y);
+
+		Canvas_FloodFill(canvas,palette,x,y-1,targetColorIndex);
+		Canvas_FloodFill(canvas,palette,x,y+1,targetColorIndex);
+		Canvas_FloodFill(canvas,palette,x-1,y,targetColorIndex);
+		Canvas_FloodFill(canvas,palette,x+1,y,targetColorIndex);
+		
+	}
+ 
+}

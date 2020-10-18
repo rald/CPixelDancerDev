@@ -23,6 +23,6 @@ Canvas *Canvas_New(int x,int y,int w,int h,int sz);
 void Canvas_Free(Canvas **canvas);  
 void Canvas_Draw(Canvas *canvas,Palette *palette);
 void Canvas_HandleEvents(Canvas *canvas,Palette *palette);
-
+void Canvas_FloodFill(Canvas *canvas,Palette *palette,int x,int y,int targetColorIndex);
 
 #endif
