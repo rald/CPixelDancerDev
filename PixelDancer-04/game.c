@@ -2,7 +2,6 @@
 #include <GL/gl2d.h>
 
 #include "palette.h"
-#include "grid.h"
 #include "canvas.h"
 
 
@@ -31,28 +30,23 @@ int main(int argc, char *argv[]) {
 	glBlendMode(GL2D_ALPHA);
 
 	Palette *palette=Palette_New(
-		4,
+		0,SCREEN_HEIGHT-1-32,5,32,4,
 		GL2D_RGBA(  0,  0,  0,255),
 		GL2D_RGBA(103,103,103,255),
 		GL2D_RGBA(182,182,182,255),
 		GL2D_RGBA(255,255,255,255)
 	);
 
-	int currentColorIndex=0;
-
-	Canvas *canvas=Canvas_New(16,16);
-
-	Grid *grid=Grid_New(0,0,16,16,16);
-
-	grid->visible=true;
+	Canvas *canvas=Canvas_New(0,0,32,32,16);
 
 	glBoxFilled(0,0,SCREEN_WIDTH-1,SCREEN_HEIGHT-1,palette->colors[1]);
-	
-	Grid_Draw(grid,canvas,palette);
+	Canvas_Draw(canvas,palette);
+	Palette_Draw(palette);
 
 	while(!quit) {
 
-		Grid_HandleEvents(grid,canvas,palette,currentColorIndex);
+		Canvas_HandleEvents(canvas,palette);
+		Palette_HandleEvents(palette);	
 
 		glfwSwapBuffers();
 
@@ -63,6 +57,9 @@ int main(int argc, char *argv[]) {
 
 	}
 
+
+
+	Canvas_Free(&canvas);
 	Palette_Free(&palette);
 
 	glfwTerminate();

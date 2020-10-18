@@ -69,14 +69,16 @@ void Grid_Draw(Grid *grid,Canvas *canvas,Palette *palette) {
 
 void Grid_HandleEvents(Grid *grid,Canvas *canvas,Palette *palette,int currentColorIndex) {
 
-	glfwGetMousePos(&mouseX,&mouseY);
-	
-	int x=(mouseX-grid->x)/grid->sz;
-	int y=(mouseY-grid->y)/grid->sz;
+	int mouseX,mouseY;
+
+	glfwGetMousePos(&mouseX,&mouseY);		
 
 	if(glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT)==GLFW_PRESS) {
+		int x=(mouseX-grid->x)/grid->sz;
+		int y=(mouseY-grid->y)/grid->sz;
 		if(x>=0 && x<=grid->w && y>=0 && y<=grid->h) {
-			canvas->pixels[palette->colors[currentColorIndex]];
+			canvas->pixels[x+y*canvas->w]=currentColorIndex;
 		}
 	}
+
 }

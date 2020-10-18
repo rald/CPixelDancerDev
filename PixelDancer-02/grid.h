@@ -26,5 +26,6 @@ struct Grid {
 Grid *Grid_New(int x,int y,int w,int h,int sz);
 void Grid_Free(Grid *grid);
 void Grid_Draw(Grid *grid,Canvas *canvas,Palette *palette);
+void Grid_HandleEvents(Grid *grid,Canvas *canvas,Palette *palette,int currentColorIndex);
 
 #endif
