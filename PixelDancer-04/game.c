@@ -1,9 +1,10 @@
 #include <GL/glfw.h>
 #include <GL/gl2d.h>
 
+#include "font.h"
 #include "palette.h"
 #include "canvas.h"
-
+#include "thumbnail.h"
 
 
 #define GAME_TITLE "PixelDancer"
@@ -39,14 +40,22 @@ int main(int argc, char *argv[]) {
 
 	Canvas *canvas=Canvas_New(0,0,32,32,16);
 
+	Thumbnail *thumbnail=Thumbnail_New(SCREEN_WIDTH-32-2,0,1);
+
 	glBoxFilled(0,0,SCREEN_WIDTH-1,SCREEN_HEIGHT-1,palette->colors[1]);
+
 	Canvas_Draw(canvas,palette);
 	Palette_Draw(palette);
+	Thumbnail_Draw(thumbnail,canvas,palette);
 
 	while(!quit) {
 
-		Canvas_HandleEvents(canvas,palette);
+		if(Canvas_HandleEvents(canvas,palette)) {
+			Thumbnail_Draw(thumbnail,canvas,palette);
+		}
+
 		Palette_HandleEvents(palette);	
+
 
 		glfwSwapBuffers();
 
@@ -56,8 +65,6 @@ int main(int argc, char *argv[]) {
 		quit=glfwGetKey(GLFW_KEY_ESC)|!glfwGetWindowParam(GLFW_OPENED);
 
 	}
-
-
 
 	Canvas_Free(&canvas);
 	Palette_Free(&palette);

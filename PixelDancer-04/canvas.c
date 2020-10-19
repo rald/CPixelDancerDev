@@ -65,7 +65,7 @@ void Canvas_Draw(Canvas *canvas,Palette *palette) {
 
 
 
-void Canvas_HandleEvents(Canvas *canvas,Palette *palette) {
+bool Canvas_HandleEvents(Canvas *canvas,Palette *palette) {
 	int mouseX,mouseY;
 
 	glfwGetMousePos(&mouseX,&mouseY);
@@ -73,31 +73,31 @@ void Canvas_HandleEvents(Canvas *canvas,Palette *palette) {
 	int x=(mouseX-canvas->x)/canvas->sz;
 	int y=(mouseY-canvas->y)/canvas->sz;
 
-	if(glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT)==GLFW_PRESS) {
-
-		if(x>=0 && x<=canvas->w && y>=0 && y<=canvas->h) {
-			canvas->pixels[x+y*canvas->w]=palette->idx;
-			Canvas_DrawCell(canvas,palette,x,y);
-		}
-
-	}
-	
-	if(glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT)==GLFW_PRESS) {
-		if(x>=0 && x<=canvas->w && y>=0 && y<=canvas->h) {
-			Palette_EraseCursor(palette);
-			palette->idx=canvas->pixels[x+y*canvas->w];
-			Palette_DrawCursor(palette,palette->idx);
-			
-		}
-	}
-
 	if(glfwGetMouseButton(GLFW_MOUSE_BUTTON_MIDDLE)==GLFW_PRESS) {
 		int pixel=canvas->pixels[x+y*canvas->w];
 		if(pixel!=palette->idx) {
 			Canvas_FloodFill(canvas,palette,x,y,pixel);
 		}
+		return true;
 	}
 
+	if(glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT)==GLFW_PRESS) {
+		if(x>=0 && x<canvas->w && y>=0 && y<canvas->h) {
+			canvas->pixels[x+y*canvas->w]=palette->idx;
+			Canvas_DrawCell(canvas,palette,x,y);
+			return true;
+		}
+	}
+	
+	if(glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT)==GLFW_PRESS) {
+		if(x>=0 && x<canvas->w && y>=0 && y<canvas->h) {
+			Palette_EraseCursor(palette);
+			palette->idx=canvas->pixels[x+y*canvas->w];
+			Palette_DrawCursor(palette,palette->idx);			
+		}
+	}
+
+	return false;
 }
 
 

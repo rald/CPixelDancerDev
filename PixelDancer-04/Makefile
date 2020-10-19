@@ -3,7 +3,7 @@ CFLAGS=-Wall -g
 LFLAGS=-lgl2d -lglfw -lXrandr -lX11 -lGL -lGLU -lpthread -lm
 INCDIR=-I.
 LIBDIR=-L.
-OBJS=game.o palette.o canvas.o
+OBJS=game.o palette.o canvas.o thumbnail.o
 
 game: $(OBJS)
 	$(CC) -o game $(OBJS) $(LIBDIR) $(LFLAGS)
@@ -16,6 +16,9 @@ palette.o: palette.c
 
 canvas.o: canvas.c
 	$(CC) -c canvas.c $(INCDIR) $(CFLAGS)
+
+thumbnail.o: thumbnail.c
+	$(CC) -c thumbnail.c $(INCDIR) $(CFLAGS)
 
 
 
