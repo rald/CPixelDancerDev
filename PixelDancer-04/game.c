@@ -66,6 +66,7 @@ int main(int argc, char *argv[]) {
 
 	}
 
+	Thumbnail_Free(&thumbnail);
 	Canvas_Free(&canvas);
 	Palette_Free(&palette);
 
