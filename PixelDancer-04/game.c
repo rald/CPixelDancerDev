@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 			Thumbnail_Draw(thumbnail,canvas,palette);
 		}
 
-		Palette_HandleEvents(palette);	
+		Palette_HandleEvents(palette);
 
 
 		glfwSwapBuffers();

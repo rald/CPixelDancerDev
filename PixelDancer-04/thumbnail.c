@@ -16,6 +16,15 @@ void Thumbnail_Free(Thumbnail **thumbnail) {
 }
 
 void Thumbnail_Draw(Thumbnail *thumbnail,Canvas *canvas,Palette *palette) {
+
+	glBoxFilled(
+		thumbnail->x+1,
+		thumbnail->y+1,
+		thumbnail->x+canvas->w*thumbnail->sz,
+		thumbnail->y+canvas->h*thumbnail->sz,
+		palette->colors[1]
+	);
+
 	for(int j=0;j<canvas->h;j++) {
 		for(int i=0;i<canvas->w;i++) {
 			int x0=i*thumbnail->sz+thumbnail->x+1;
